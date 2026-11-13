@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0F5132">
+<title>সাকিনা – ডিজিটাল তাসবিহ</title>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Noto+Sans+Bengali:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#FBF6EA;--card:#fff;--ink:#17261F;--mut:#4A5A52;--em:#0F5132;--mint:#DDF0E6;--gold:#8A6A1E;--bd:#E4DCC8;--ar:#0F5132;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0E1A15;--card:#16251E;--ink:#EAF2ED;--mut:#A9BBB1;--em:#1F7A55;--mint:#1D3329;--gold:#E8D49A;--bd:#27382F;--ar:#9FE0BF}}
+:root[data-theme="dark"]{--bg:#0E1A15;--card:#16251E;--ink:#EAF2ED;--mut:#A9BBB1;--em:#1F7A55;--mint:#1D3329;--gold:#E8D49A;--bd:#27382F;--ar:#9FE0BF}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:'Noto Sans Bengali',system-ui,sans-serif;color-scheme:light dark}
+#app{max-width:520px;margin:0 auto;padding:16px 16px calc(96px + env(safe-area-inset-bottom,0px))}
+.ar{font-family:'Amiri',serif;direction:rtl;line-height:1.7;color:var(--ar);text-align:center}
+.c{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:16px;margin-bottom:12px}
+button{font-family:inherit;font-size:16px;cursor:pointer;color:var(--ink)}
+.b{min-height:52px;border-radius:26px;background:var(--em);color:#fff;border:0;font-weight:600;width:100%}
+.b2{background:var(--mint);color:var(--ar)}
+.chip{min-height:44px;padding:0 16px;border-radius:22px;background:var(--card);border:1px solid var(--bd)}
+.chip.on{background:var(--em);color:#fff;border-color:var(--em)}
+.m{color:var(--mut);font-size:14px}.g{color:var(--gold);font-weight:600;font-size:13px}
+h1{font-size:24px;margin:0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:8px}
+input[type=text],input[type=number],input[type=search]{width:100%;box-sizing:border-box;min-height:48px;border:1px solid var(--bd);border-radius:14px;padding:0 14px;font-size:16px;background:var(--card);color:var(--ink);font-family:inherit}
+label{display:block;font-size:13px;font-weight:600;margin:10px 0 4px;color:var(--mut)}
+nav{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--bd);display:flex;padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;min-height:64px;background:none;border:0;font-size:13px;color:var(--mut)}
+nav button.on{color:var(--ar);font-weight:700}
+.tap{width:230px;height:230px;border-radius:50%;background:var(--em);color:#fff;border:0;box-shadow:0 10px 24px rgba(0,0,0,.25);-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.bar{display:flex;align-items:flex-end;gap:8px;height:120px}.bar div{flex:1;text-align:center;font-size:12px;color:var(--mut)}.bar i{display:block;background:var(--em);border-radius:6px 6px 0 0}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<nav id="nav" hidden></nav>
+<script>
+var D=[
+["সুবহানাল্লাহ","SubhanAllah","سُبْحَانَ اللَّهِ","আল্লাহ পবিত্র","Glory be to Allah"],
+["আলহামদুলিল্লাহ","Alhamdulillah","الْحَمْدُ لِلَّهِ","সকল প্রশংসা আল্লাহর","All praise is for Allah"],
+["আল্লাহু আকবার","Allahu Akbar","اللَّهُ أَكْبَرُ","আল্লাহ সবচেয়ে মহান","Allah is the Greatest"],
+["লা ইলাহা ইল্লাল্লাহ","La ilaha illallah","لَا إِلَٰهَ إِلَّا اللَّهُ","আল্লাহ ছাড়া কোনো ইলাহ নেই","There is no god but Allah"],
+["আস্তাগফিরুল্লাহ","Astaghfirullah","أَسْتَغْفِرُ اللَّهَ","আমি আল্লাহর কাছে ক্ষমা চাই","I seek forgiveness from Allah"],
+["সুবহানাল্লাহি ওয়া বিহামদিহি","SubhanAllahi wa bihamdihi","سُبْحَانَ اللَّهِ وَبِحَمْدِهِ","আল্লাহ পবিত্র, তাঁর প্রশংসাসহ","Glory and praise be to Allah"],
+["সুবহানাল্লাহিল আজীম","SubhanAllahil Azeem","سُبْحَانَ اللَّهِ الْعَظِيمِ","মহান আল্লাহ পবিত্র","Glory be to Allah, the Magnificent"],
+["আল্লাহুম্মা সাল্লি আলা মুহাম্মাদ","Allahumma salli ala Muhammad","اللَّهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ","হে আল্লাহ, মুহাম্মাদের ওপর রহমত বর্ষণ করুন","O Allah, send blessings upon Muhammad"],
+["লা হাওলা ওয়ালা কুওয়াতা ইল্লা বিল্লাহ","La hawla wa la quwwata illa billah","لَا حَوْلَ وَلَا قُوَّةَ إِلَّا بِاللَّهِ","আল্লাহর সাহায্য ছাড়া কোনো শক্তি বা ক্ষমতা নেই","There is no power nor strength except with Allah"],
+["সুবহানাল্লাহি ওয়াল হামদুলিল্লাহি ওয়া লা ইলাহা ইল্লাল্লাহু ওয়াল্লাহু আকবার","SubhanAllah walhamdulillah wa la ilaha illallah wallahu akbar","سُبْحَانَ اللَّهِ وَالْحَمْدُ لِلَّهِ وَلَا إِلَٰهَ إِلَّا اللَّهُ وَاللَّهُ أَكْبَرُ","আল্লাহ পবিত্র, সকল প্রশংসা আল্লাহর, আল্লাহ ছাড়া কোনো ইলাহ নেই, আল্লাহ সবচেয়ে মহান","Glory be to Allah, all praise is for Allah, there is no god but Allah, and Allah is the Greatest"]
+].map(function(a,i){return{id:"d"+i,pb:a[0],pe:a[1],ar:a[2],mb:a[3],me:a[4]}});
+var T={bn:{home:"হোম",count:"গণনা",hist:"হিসাব",set:"সেটিংস",hi:"আসসালামু আলাইকুম",search:"যিকর খুঁজুন",today:"আজকের যিকর",start:"গণনা শুরু করুন",target:"লক্ষ্য",undo:"পূর্বাবস্থা",reset:"রিসেট",pause:"বিরতি",resume:"চালু করুন",done:"আলহামদুলিল্লাহ! লক্ষ্য পূর্ণ হয়েছে",again:"আবার শুরু করুন",cont:"চালিয়ে যান",add:"নিজের যিকর যোগ করুন",name:"নাম",arabic:"আরবি (ঐচ্ছিক)",mean:"অর্থ",save:"সংরক্ষণ",del:"মুছুন",total:"মোট",life:"সর্বমোট",sess:"সেশন",week:"গত ৭ দিন",top:"সবচেয়ে বেশি",none:"এখনো কিছু নেই। গণনা শুরু করুন।",ok:"সম্পন্ন",inc:"অসম্পন্ন",lang:"ভাষা",theme:"থিম",light:"হালকা",dark:"গাঢ়",sys:"সিস্টেম",tsnd:"ট্যাপ সাউন্ড",csnd:"সম্পন্ন সাউন্ড",vib:"ভাইব্রেশন",size:"লেখার আকার",fav:"প্রিয়",all:"সব",wc:"বাংলা বা ইংরেজি বেছে নিন",go:"এগিয়ে যান",empty:"কিছু পাওয়া যায়নি",tip:"ফোনের ব্রাউজার মেনু থেকে হোম স্ক্রিনে যোগ করুন"},en:{home:"Home",count:"Count",hist:"History",set:"Settings",hi:"Assalamu Alaikum",search:"Search dhikr",today:"Dhikr of the day",start:"Start Counting",target:"Target",undo:"Undo",reset:"Reset",pause:"Pause",resume:"Resume",done:"Alhamdulillah! Target completed",again:"Start again",cont:"Keep counting",add:"Add your own dhikr",name:"Name",arabic:"Arabic (optional)",mean:"Meaning",save:"Save",del:"Delete",total:"Total",life:"Lifetime",sess:"Sessions",week:"Last 7 days",top:"Most performed",none:"Nothing yet. Start counting.",ok:"Completed",inc:"Incomplete",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",sys:"System",tsnd:"Tap sound",csnd:"Completion sound",vib:"Vibration",size:"Text size",fav:"Favorites",all:"All",wc:"Choose Bengali or English",go:"Continue",empty:"Nothing found",tip:"Add this page to your home screen from the browser menu"}};
+var S={lang:"",theme:"system",ts:1,cs:1,vb:1,sz:1,cur:"d0",c:{},t:{},dn:{},hist:[],fav:[],cu:[],paused:0};
+try{var x=JSON.parse(localStorage.getItem("sakina")||"null");if(x)for(var k in x)S[k]=x[k]}catch(e){}
+function save(){try{localStorage.setItem("sakina",JSON.stringify(S))}catch(e){}}
+var tab="home",q="",flt="all",showForm=0;
+function setForm(v){showForm=v;render()}
+function L(k){return T[S.lang||"bn"][k]}
+function all(){return D.concat(S.cu)}
+function get(id){return all().filter(function(d){return d.id==id})[0]||D[0]}
+function pr(d){return S.lang=="en"?d.pe:d.pb}
+function mn(d){return S.lang=="en"?d.me:d.mb}
+function tg(id){return S.t[id]||100}
+function day(ts){var d=new Date(ts);return d.getFullYear()+"-"+("0"+(d.getMonth()+1)).slice(-2)+"-"+("0"+d.getDate()).slice(-2)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+var AC;function beep(f,d,v){try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();var o=AC.createOscillator(),g=AC.createGain();o.frequency.value=f;o.type="sine";g.gain.value=v;o.connect(g);g.connect(AC.destination);o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d)}catch(e){}}
+function vib(p){if(!S.vb)return;var a=[].concat(p),H=window.Capacitor&&window.Capacitor.Plugins&&window.Capacitor.Plugins.Haptics;
+if(H&&H.vibrate){var t=0;a.forEach(function(ms,i){if(i%2==0)setTimeout(function(){try{H.vibrate({duration:ms})}catch(e){}},t);t+=ms});return}
+if(navigator.vibrate)navigator.vibrate(p)}
+function log(id,c,t,ok){S.hist.push({id:id,n:pr(get(id)),c:c,t:t,ts:Date.now(),ok:ok?1:0});}
+function tap(){if(S.paused)return;var id=S.cur,c=(S.c[id]||0)+1,t=tg(id);S.c[id]=c;
+if(c==t&&!S.dn[id]){S.dn[id]=1;log(id,c,t,1);if(S.cs){beep(660,.4,.12);setTimeout(function(){beep(880,.6,.12)},250)}vib([40,60,40])}
+else{if(S.ts)beep(520,.06,.06);vib(25)}
+save();render()}
+function undo(){var id=S.cur;if((S.c[id]||0)>0){S.c[id]--;save();render()}}
+function reset(){var id=S.cur;if((S.c[id]||0)>0&&!S.dn[id])log(id,S.c[id],tg(id),0);S.c[id]=0;S.dn[id]=0;save();render()}
+function again(){S.c[S.cur]=0;S.dn[S.cur]=0;save();render()}
+function start(id){S.cur=id;tab="count";render()}
+function setT(n){n=parseInt(n);if(n>0){S.t[S.cur]=n;if((S.c[S.cur]||0)<n)S.dn[S.cur]=0;save();render()}}
+function favT(id){var i=S.fav.indexOf(id);i<0?S.fav.push(id):S.fav.splice(i,1);save();renderList()}
+function pickLang(l){S.lang=l;save();render()}
+function addCu(){var n=document.getElementById("fn").value.trim();if(!n)return;var id="u"+Date.now();var m=document.getElementById("fm").value.trim();S.cu.push({id:id,pb:n,pe:n,ar:document.getElementById("fa").value.trim(),mb:m,me:m,cu:1});S.t[id]=parseInt(document.getElementById("ft").value)||100;showForm=0;save();render()}
+function delCu(id){S.cu=S.cu.filter(function(d){return d.id!=id});S.fav=S.fav.filter(function(x){return x!=id});save();renderList()}
+function card(d){var f=S.fav.indexOf(d.id)>=0;return '<div class="c">'+(d.ar?'<div class="ar" lang="ar" style="font-size:'+(36*S.sz)+'px">'+d.ar+'</div>':'')+'<div style="text-align:center;font-weight:600;font-size:'+(17*S.sz)+'px">'+esc(pr(d))+'</div><div class="m" style="text-align:center;margin-bottom:12px;font-size:'+(14*S.sz)+'px">'+esc(mn(d))+'</div><div class="row"><button class="b" onclick="start(\''+d.id+'\')">'+L("start")+'</button><button class="chip'+(f?' on':'')+'" aria-label="'+L("fav")+'" onclick="favT(\''+d.id+'\')">★</button>'+(d.cu?'<button class="chip" onclick="delCu(\''+d.id+'\')">'+L("del")+'</button>':'')+'</div></div>'}
+function renderList(){var el=document.getElementById("list");if(!el)return;var s=q.toLowerCase();var r=all().filter(function(d){if(flt=="fav"&&S.fav.indexOf(d.id)<0)return 0;return !s||(d.ar+d.pb+d.pe+d.mb+d.me).toLowerCase().indexOf(s)>=0});el.innerHTML=r.length?r.map(card).join(""):'<p class="m">'+L("empty")+'</p>'}
+function sum(f){return S.hist.filter(f).reduce(function(a,h){return a+h.c},0)}
+function todayN(){var d=day(Date.now());return sum(function(h){return day(h.ts)==d})+allLive(d)}
+function allLive(d){var n=0;for(var k in S.c)if(!S.dn[k])n+=S.c[k]||0;return n}
+function view(){
+if(!S.lang)return '<h1 style="margin-top:48px;font-size:28px">ভাষা নির্বাচন করুন</h1><p class="m" style="font-size:17px">Choose your language</p><button class="b" style="margin:16px 0;min-height:72px;font-size:22px" onclick="pickLang(\'bn\')">বাংলা</button><button class="b b2" style="min-height:72px;font-size:22px" onclick="pickLang(\'en\')">English</button><p class="m">আরবি সবসময় দেখা যাবে · Arabic always visible</p>';
+if(tab=="home"){if(showForm)return '<h1>'+L("add")+'</h1><label>'+L("name")+'</label><input type="text" id="fn"><label>'+L("arabic")+'</label><input type="text" id="fa" dir="rtl"><label>'+L("mean")+'</label><input type="text" id="fm"><label>'+L("target")+'</label><input type="number" id="ft" value="100" min="1"><button class="b" style="margin-top:16px" onclick="addCu()">'+L("save")+'</button><button class="b b2" style="margin-top:10px" onclick="setForm(0)">←</button>';
+var t=todayN();return '<div class="g" style="text-align:center;font-size:20px;direction:rtl">السَّلَامُ عَلَيْكُمْ</div><h1 style="text-align:center">'+L("hi")+'</h1><div class="c" style="margin-top:14px;background:var(--em);color:#fff;border:0"><div style="font-size:13px;opacity:.85">'+L("today")+'</div><div style="font-size:40px;font-weight:700">'+t+'</div></div><label for="sq" style="position:absolute;left:-999px">'+L("search")+'</label><input type="search" id="sq" placeholder="'+L("search")+'" value="'+esc(q)+'" oninput="q=this.value;renderList()" style="margin-bottom:10px"><div style="display:flex;gap:8px;margin-bottom:12px"><button class="chip'+(flt=="all"?' on':'')+'" onclick="flt=\'all\';render()">'+L("all")+'</button><button class="chip'+(flt=="fav"?' on':'')+'" onclick="flt=\'fav\';render()">'+L("fav")+'</button><button class="chip" onclick="setForm(1)">+ '+L("add")+'</button></div><div id="list"></div>'}
+if(tab=="count"){var d=get(S.cur),c=S.c[S.cur]||0,t=tg(S.cur),p=Math.min(100,Math.round(c*100/t)),C=2*Math.PI*118,dn=c>=t;
+return '<div style="text-align:center">'+(d.ar?'<div class="ar" lang="ar" style="font-size:'+(44*S.sz)+'px">'+d.ar+'</div>':'')+'<div style="font-weight:700;font-size:'+(19*S.sz)+'px">'+esc(pr(d))+'</div><div class="m">'+esc(mn(d))+'</div><div style="position:relative;width:270px;height:270px;margin:14px auto"><svg width="270" height="270" viewBox="0 0 270 270" style="position:absolute;inset:0" aria-hidden="true"><circle cx="135" cy="135" r="118" fill="none" stroke="var(--mint)" stroke-width="12"/><circle cx="135" cy="135" r="118" fill="none" stroke="#C9A24B" stroke-width="12" stroke-linecap="round" stroke-dasharray="'+(C*p/100)+' '+C+'" transform="rotate(-90 135 135)"/></svg><button class="tap" style="position:absolute;left:20px;top:20px" onclick="tap()" aria-label="+1"><div style="font-size:'+(72*S.sz)+'px;font-weight:700;line-height:1">'+c+'</div><div style="font-size:15px;opacity:.85">/ '+t+' · '+p+'%</div></button></div>'+(dn?'<div class="c"><b>'+L("done")+'</b><div class="row" style="margin-top:10px"><button class="b" onclick="again()">'+L("again")+'</button><button class="b b2" onclick="S.dn[S.cur]=1;render()">'+L("cont")+'</button></div></div>':'')+'<div class="row" style="margin-bottom:12px"><button class="chip" style="flex:1" onclick="undo()">'+L("undo")+'</button><button class="chip" style="flex:1" onclick="reset()">'+L("reset")+'</button><button class="chip" style="flex:1" onclick="S.paused=!S.paused;render()">'+(S.paused?L("resume"):L("pause"))+'</button></div><div class="m">'+L("target")+'</div><div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:6px 0">'+[33,100,200,500,1000].map(function(n){return '<button class="chip'+(t==n?' on':'')+'" onclick="setT('+n+')">'+n+'</button>'}).join("")+'</div><input type="number" min="1" placeholder="'+L("target")+'" onchange="setT(this.value)" aria-label="'+L("target")+'"></div>'}
+if(tab=="hist"){var days=[],i;for(i=6;i>=0;i--)days.push(day(Date.now()-i*864e5));var vals=days.map(function(d){return sum(function(h){return day(h.ts)==d})}),mx=Math.max.apply(null,vals.concat([1]));
+var tp={};S.hist.forEach(function(h){tp[h.n]=(tp[h.n]||0)+h.c});var tops=Object.keys(tp).sort(function(a,b){return tp[b]-tp[a]}).slice(0,3);
+var h=S.hist.slice().reverse(),g="",ld="";h.forEach(function(e){var dd=day(e.ts);if(dd!=ld){g+='<div class="g" style="margin:14px 0 6px">'+dd+'</div>';ld=dd}var tm=new Date(e.ts);g+='<div class="c row" style="padding:12px"><div><b>'+esc(e.n)+'</b><div class="m">'+("0"+tm.getHours()).slice(-2)+":"+("0"+tm.getMinutes()).slice(-2)+'</div></div><div style="text-align:right"><b>'+e.c+' / '+e.t+'</b><div class="g">'+(e.ok?L("ok"):L("inc"))+'</div></div></div>'});
+return '<h1>'+L("hist")+'</h1><div class="row" style="margin:12px 0"><div class="c" style="flex:1;text-align:center;margin:0"><b style="font-size:26px">'+todayN()+'</b><div class="m">'+L("today")+'</div></div><div class="c" style="flex:1;text-align:center;margin:0"><b style="font-size:26px">'+sum(function(){return 1})+'</b><div class="m">'+L("life")+'</div></div><div class="c" style="flex:1;text-align:center;margin:0"><b style="font-size:26px">'+S.hist.filter(function(e){return e.ok}).length+'</b><div class="m">'+L("sess")+'</div></div></div><div class="c"><div class="g">'+L("week")+'</div><div class="bar">'+vals.map(function(v,i){return '<div><i style="height:'+Math.max(4,v*90/mx)+'px"></i>'+days[i].slice(8)+'</div>'}).join("")+'</div></div>'+(tops.length?'<div class="c"><div class="g">'+L("top")+'</div>'+tops.map(function(n){return '<div class="row" style="padding:6px 0"><span>'+esc(n)+'</span><b>'+tp[n]+'</b></div>'}).join("")+'</div>':'')+(h.length?g:'<p class="m">'+L("none")+'</p>')}
+function sw(k,key){return '<label class="row" style="margin:0;min-height:52px;font-size:16px;color:var(--ink)"><span>'+L(k)+'</span><input type="checkbox" '+(S[key]?'checked':'')+' onchange="S.'+key+'=this.checked?1:0;save()" style="width:26px;height:26px;accent-color:var(--em)"></label>'}
+return '<h1>'+L("set")+'</h1><div class="c" style="margin-top:12px"><div class="g">'+L("lang")+'</div><div style="display:flex;gap:8px;margin-top:8px"><button class="chip'+(S.lang=="bn"?' on':'')+'" onclick="pickLang(\'bn\')">বাংলা</button><button class="chip'+(S.lang=="en"?' on':'')+'" onclick="pickLang(\'en\')">English</button></div></div><div class="c"><div class="g">'+L("theme")+'</div><div style="display:flex;gap:8px;margin-top:8px">'+[["light","light"],["dark","dark"],["sys","system"]].map(function(a){return '<button class="chip'+(S.theme==a[1]?' on':'')+'" onclick="setTh(\''+a[1]+'\')">'+L(a[0])+'</button>'}).join("")+'</div></div><div class="c">'+sw("tsnd","ts")+sw("csnd","cs")+sw("vib","vb")+'<label for="sz">'+L("size")+'</label><input id="sz" type="range" min="1" max="1.5" step=".1" value="'+S.sz+'" onchange="S.sz=parseFloat(this.value);save()" style="width:100%;accent-color:var(--em)"></div><p class="m">'+L("tip")+'</p>'}
+function setTh(t){S.theme=t;save();applyTh();render()}
+function applyTh(){var r=document.documentElement;if(S.theme=="system")r.removeAttribute("data-theme");else r.setAttribute("data-theme",S.theme)}
+function render(){var a=document.getElementById("app");a.innerHTML=view();var n=document.getElementById("nav");n.hidden=!S.lang||showForm;n.innerHTML=[["home","home"],["count","count"],["hist","hist"],["set","set"]].map(function(x){return '<button class="'+(tab==x[0]?'on':'')+'" onclick="tab=\''+x[0]+'\';render()">'+L(x[1])+'</button>'}).join("");renderList()}
+applyTh();render();
+</script>
+</body>
+</html>
